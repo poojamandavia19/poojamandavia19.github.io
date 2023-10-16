@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Website with Async API Calls</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" onclick="showPage('about')">About</a></li>
+            <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="container">
+        <div id="home" class="page-content">
+            <h1>Welcome to the Home Page</h1>
+            <p>This is the home page content.</p>
+        </div>
+
+        <div id="about" class="page-content" style="display: none;">
+            <h1>About Us</h1>
+            <p>Learn more about our organization.</p>
+            <div class="container">
+                <h1>Data from API:</h1>
+                <ul id="data-list"></ul>
+            </div>
+        </div>
+
+        <div id="contact" class="page-content" style="display: none;">
+            <h1>Contact Us</h1>
+            <p>Contact information goes here.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Segment Dialog Example</title>
+    <style>
+        .content {
+            display: none;
+        }
+
+        .content:target {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        body.auto-open-dialog #myModal {
+            display: block;
+        }
+    </style>
+</head>
+<body class="auto-open-dialog">
+    <nav>
+        <ul>
+            <li><a href="#user/123">User 123</a></li>
+            <li><a href="#user/456">User 456</a></li>
+            <li><a href="#user/789">User 789</a></li>
+        </ul>
+    </nav>
+
+    <div id="user/123" class="content">
+        <h1>User 123 Details</h1>
+        <p>This is the information for User 123.</p>
+        <button onclick="openDialog('User 123 Details')">Open Dialog</button>
+    </div>
+
+    <div id="user/456" class="content">
+        <h1>User 456 Details</h1>
+        <p>This is the information for User 456.</p>
+        <button onclick="openDialog('User 456 Details')">Open Dialog</button>
+    </div>
+
+    <div id="user/789" class="content">
+        <h1>User 789 Details</h1>
+        <p>This is the information for User 789.</p>
+        <button onclick="openDialog('User 789 Details')">Open Dialog</button>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDialog()">&times;</span>
+            <div id="dialogContent"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlSegments = window.location.hash.split('/');
+            console.log(`urlSegments -> ${urlSegments}   ---> ${urlSegments.length} -> ${urlSegments[0]} | ${urlSegments[1]} | ${urlSegments[2]}`)
+            if (urlSegments.length === 2) {
+                const userId = urlSegments[1];
+                const contentElement = document.getElementById(`user/${userId}`);
+                console.log("HERE -----------")
+                if (contentElement) {
+                    console.log("Open Dialog");
+                    const content = contentElement.innerHTML;
+                    openDialog(content);
+                }
+            }
+        });
+
+        function openDialog(content) {
+            console.log("Dialog should be opened");
+            const dialogContent = document.getElementById('dialogContent');
+            dialogContent.innerHTML = content;
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'block';
+        }
+
+        function closeDialog() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

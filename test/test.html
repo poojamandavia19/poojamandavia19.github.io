@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTTP Request Example</title>
+</head>
+<body>
+
+<button onclick="makeHttpRequest()">Make HTTP Request</button>
+
+<script>
+    function makeHttpRequest() {
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Token : pat0bkVL8VQJizhZA.7e7cda2dc3ba5dd9e2fb945b9fa1ce217fb15a640c57bef9bd841e6ea9900476
+        // Define the type of request and the URL to make the request to
+        // xhr.open("GET", "https://api.airtable.com/v0/wsp1vPjgn7hXig2Em/tblUsNuHKKrBU0IJb", true);
+        xhr.open("GET", "https://api.airtable.com/v0/appo6H7gBHY7NC6zm/Participants", true);
+        xhr.setRequestHeader("Authorization", "Bearer pat0bkVL8VQJizhZA.7e7cda2dc3ba5dd9e2fb945b9fa1ce217fb15a640c57bef9bd841e6ea9900476");
+
+        // Define a function to handle the response
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Parse the response JSON (assuming it's JSON in this example)
+                var response = JSON.parse(xhr.responseText);
+                console.log("Response:", JSON.stringify(response));
+            } else if (xhr.readyState === XMLHttpRequest.DONE) {
+                console.log("Error:", xhr);
+                console.log("Error:", xhr.status);
+            }
+        };
+
+        // Send the request
+        xhr.send();
+    }
+</script>
+
+</body>
+</html>
