@@ -85,6 +85,7 @@
             <div id="dialogContent"></div>
         </div>
     </div>
+    <div id= "xyz"> Testing for dynamic content</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -105,7 +106,7 @@
         function openDialog(content) {
             console.log("Dialog should be opened");
             const dialogContent = document.getElementById('dialogContent');
-            dialogContent.innerHTML = content;
+            dialogContent.innerHTML = document.getElementById('xyz');
             const modal = document.getElementById('myModal');
             modal.style.display = 'block';
         }
