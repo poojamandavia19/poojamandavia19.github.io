@@ -179,9 +179,15 @@ function filterCategory(value) {
   //parameter passed from button (Parameter same as category)
 function filterCategoryByDiscipline(value) {
   if(allProjects.length){
-    let dataToFilter = allProjects.filter((n, i)=>{
-      return n.MainDisciplineOfWork===value;
-    });
+    let dataToFilter = [];
+    if(value == "all"){
+      dataToFilter = allProjects;
+    }else{
+      dataToFilter = allProjects.filter((n, i)=>{
+        return n.MainDisciplineOfWork===value;
+      });
+    }
+    
     let worksElement = document.getElementById("works")
     worksElement.innerHTML="";
     setDataInCards(dataToFilter);
@@ -195,7 +201,7 @@ function filterCategoryByDiscipline(value) {
       }
     });
   }else{
-
+    //TODO
   }
 }
 
