@@ -204,7 +204,7 @@ function filterCategory(value) {
 
   // collect all data-modal-target elements
   const openModalButtons = document.querySelectorAll('[data-modal-target]')
-  const closeModalButtons = document.querySelectorAll('.close-button')
+  // const closeModalButtons = document.querySelectorAll('.close-button')
   const overlay = document.getElementById('overlay')
   const closeArea = document.getElementById('close-area')
   const body = document.body
@@ -224,12 +224,12 @@ function filterCategory(value) {
     })
   })
 
-  closeModalButtons.forEach(a => {
+  /* closeModalButtons.forEach(a => {
     a.addEventListener('click', () => {
       const modal = a.closest('.modal')
       closeModal(modal)
     })
-  })
+  }) */
 
   function openModal(modal) {
     if (modal == null) return
@@ -286,11 +286,13 @@ function filterCategory(value) {
         //TODO: Change the worktitle to actual worktitle
         let name = document.createElement("h3");
         name.innerText = dataObject?.ProjectTitle?.toUpperCase();
+        name.style.fontSize = "1.5rem";
         container.appendChild(name);
         
         //author
         //TODO: What is this field ?
         let author = document.createElement("h4");
+        author.style.fontSize = "1.2rem";
         card.classList.add("search-result");
         author.innerText = `${dataObject?.StudentFirstName} ${dataObject?.StudentLastName}`?.replace(
           /\w\S*/g,
@@ -648,8 +650,8 @@ function setProjectDataInModal(projectData){
   // create a div holding close button
   const closeButton = document.createElement("a");
   closeButton.addEventListener("click", () => {
-    const modal = a.closest('.modal')
-    closeModal(modal)
+    const modal = closeButton.closest('.modal')
+    closeModal(modal);
   });
   // a.addEventListener('click', )
   closeButton.classList.add("close-button");
