@@ -13,6 +13,15 @@
     src: url('fonts/LeagueSpartan-VariableFont_wght.ttf') format('truetype');
     font-weight: bold;
 }
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
+
 h1{
     font-family: Sniglet-ExtraBold;
     font-weight: bold;
@@ -87,6 +96,7 @@ body{
 navbar, .container{
     justify-content: space-around!important; /* Change this line from space-between */ 
 } 
+
 .navbar-nav{
     align-items: center; /** Align the small screen menu to center **/
     flex-direction: row;
@@ -733,12 +743,12 @@ z-index: 10;
     padding: 5px 0 0 0;
   }
   
-  /* #author-detail span {
+  #author-detail span {
     padding: 2px 10px;
     border: 1px solid #000;
     border-radius: 100px;
     margin: 0 3px 0 3px;
-  } */
+  }
   
   #author-detail #social-media-icons {
     width: 30px;
@@ -996,63 +1006,29 @@ z-index: 10;
     padding-top: 60px;
 }
 
-.modal-content {
+/* .modal-content {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* --------------- */
-/* .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding-top: 60px;
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
 } */
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
 body.auto-open-dialog #myModal {
     display: block;
 }

@@ -128,13 +128,15 @@ window.addEventListener('hashchange', function () {
     document.getElementById('myModal').style.display = 'block';
 } */
 
-function closeDialog() {
-    document.getElementById('myModal').style.display = 'none';
+function closeDialog(modalId) {
+  document.getElementById('myModal').style.display = 'none';
 }
 
 function closeDialogEventHandler(){
   return function(){
-    document.getElementById('myModal').style.display = 'none';
+    // document.getElementById(modalId).style.display = 'none';
+    // modal.style.display = "none";
+    alert("Button clicked with value: ");
   }
 }
 
@@ -649,12 +651,20 @@ function setProjectDataInModal(projectData){
   const headShotHolder = document.createElement("div");
   // create a div holding close button
   const closeButton = document.createElement("a");
-  closeButton.addEventListener("click", () => {
+  /* closeButton.addEventListener("click", () => {
     const modal = closeButton.closest('.modal')
     closeModal(modal);
-  });
+  }); */
+  // closeDialogEventHandler
+  closeButton.href = "#"; // Set the href attribute to avoid page reload
+    
+  closeButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    alert("Dynamically generated button clicked!");
+});
   // a.addEventListener('click', )
   closeButton.classList.add("close-button");
+  closeButton.setAttribute("style", "padding: 20px;");
   // draw a cross sign
   const crossSign = document.createElement("strong");
   crossSign.innerHTML = "&times;";
@@ -691,7 +701,7 @@ function setProjectDataInModal(projectData){
   authorName.appendChild(preferredName);
   // create graduate
   const graduate = document.createElement("span");
-  graduate.innerText = "Graduate: " + projectData.StudentInfo?.IsGraduated;
+  graduate.innerText = "Graduate: " + projectData.StudentInfo?.IsGraduated? "Yes": "No";
   // create student number
   const studNo = document.createElement("span");
   studNo.setAttribute("id", "student-number");
