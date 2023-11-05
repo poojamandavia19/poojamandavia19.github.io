@@ -7,6 +7,8 @@
 let api_key = "patVKblZfAGWYZJVI.ce2c55fd2190a22dab4c276f2d1d352d1ce9fee298a3ab06a405458a5826baa0"; //Production Token
 let studentTableId = "tblo1Uy6qYCc0VmAY";
 let baseId = "appo5ug4IJkVex4Oc";
+let allProjects = [];
+
 document.addEventListener("DOMContentLoaded", () => {
     const dataList = document.getElementById("works");
     const requestOptions = {
@@ -42,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((data)=>{
             // setDataInCardsNew(data);
+            allProjects = data;
             setDataInCards(data);
         })
         .then(()=>{
@@ -173,6 +176,29 @@ function filterCategory(value) {
     });
   }
 
+  //parameter passed from button (Parameter same as category)
+function filterCategoryByDiscipline(value) {
+  if(allProjects.length){
+    let dataToFilter = allProjects.filter((n, i)=>{
+      return n.MainDisciplineOfWork===value;
+    });
+    let worksElement = document.getElementById("works")
+    worksElement.innerHTML="";
+    setDataInCards(dataToFilter);
+    let buttons = document.querySelectorAll(".button-value");
+    buttons.forEach((button) => {
+      //check if value equals innerText
+      if (value.toUpperCase() == button.innerText.toUpperCase()) {
+        button.classList.add("button-active");
+      } else {
+        button.classList.remove("button-active");
+      }
+    });
+  }else{
+
+  }
+}
+
   //Search button click
   document.getElementById("search").addEventListener("click", () => {
     //initializations
@@ -247,6 +273,7 @@ function filterCategory(value) {
     body.classList.remove('active')
   }
 
+  
 
   function setDataInCards(data){
     data.forEach((dataObject)=> {
@@ -360,7 +387,7 @@ function filterCategory(value) {
                     StudentFirstName: item.fields.StudentFirstName && item.fields.StudentFirstName.length ? item.fields.StudentFirstName[0]: '',
                     StudentLastName: item.fields.StudentLastName && item.fields.StudentLastName.length ? item.fields.StudentLastName[0]: '',
                     ProjectTitle: item.fields.ProjectTitle,
-                    MainDisciplineOfWork: item.fields.MainDiscipline,
+                    MainDisciplineOfWork: item.fields.MainDisciplineOfWork,
                     author: `${item.fields.StudentFirstName && item.fields.StudentFirstName.length ? item.fields.StudentFirstName[0]: ''} 
                     ${item.fields.StudentLastName && item.fields.StudentLastName.length ? item.fields.StudentLastName[0]: ''}`,
                     HeroImage: item.fields.HeroImage && item.fields.HeroImage.length ? item.fields.HeroImage[0]: '',
