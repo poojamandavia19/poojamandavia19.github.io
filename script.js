@@ -33,14 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
             console.log(data);
-            // Display data in the list
-            /* data.records.forEach(item => {
-                const li = document.createElement("li");
-                li.textContent = `Title: ${item.id}, Body: ${item.fields?.FirstName || " "} ${item.fields?.LastName || " "}`;
-                dataList.appendChild(li);
-            }); 
-            return data.records; */
-            return getHomePageData();
+            return getFormatedHomePageData();
         })
         .then((data)=>{
             // setDataInCardsNew(data);
@@ -363,48 +356,76 @@ function filterCategoryByDiscipline(value) {
       })
   }
 
-  function getHomePageData (){
-    // API URL
-    const apiUrl = `https://api.airtable.com/v0/${baseId}/Projects`;
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${api_key}`, // Replace with your actual token
-            'Content-Type': 'application/json'
-        }
-    };
-    const fieldsToFetch = 'fields%5B%5D=StudentFirstName&fields%5B%5D=StudentLastName&fields%5B%5D=ProjectTitle&fields%5B%5D=HeroImage&fields%5B%5D=MainDisciplineOfWork&fields%5B%5D=LinkedStudentRecordId'
-    const maxRecords = "";//'maxRecords=10';
+  function getFormatedHomePageData(){
+    return getHomePageData()
+      .then(data => {
+        // Display data in the list
+        let projectDetails = [];
+        data.forEach(item => {
+            projectDetails.push({
+                id: item.id,
+                StudentFirstName: item.fields.StudentFirstName && item.fields.StudentFirstName.length ? item.fields.StudentFirstName[0]: '',
+                StudentLastName: item.fields.StudentLastName && item.fields.StudentLastName.length ? item.fields.StudentLastName[0]: '',
+                ProjectTitle: item.fields.ProjectTitle,
+                MainDisciplineOfWork: item.fields.MainDisciplineOfWork,
+                author: `${item.fields.StudentFirstName && item.fields.StudentFirstName.length ? item.fields.StudentFirstName[0]: ''} 
+                ${item.fields.StudentLastName && item.fields.StudentLastName.length ? item.fields.StudentLastName[0]: ''}`,
+                HeroImage: item.fields.HeroImage && item.fields.HeroImage.length ? item.fields.HeroImage[0]: '',
+                LinkedStudentRecordId: item.fields.LinkedStudentRecordId && item.fields.LinkedStudentRecordId.length ? item.fields.LinkedStudentRecordId[0]: '',
+            })
+        }); 
+        return projectDetails;
+    })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+  }
 
-    // Fetch data from the API
-    return fetch(`${apiUrl}?${fieldsToFetch}&${maxRecords}`, requestOptions)
-        .then(response => {
+  async function getHomePageData (){
+    try{
+      // API URL
+      const apiUrl = `https://api.airtable.com/v0/${baseId}/Projects`;
+      const requestOptions = {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${api_key}`, // Replace with your actual token
+              'Content-Type': 'application/json'
+          }
+      };
+      const fieldsToFetch = 'fields%5B%5D=StudentFirstName&fields%5B%5D=StudentLastName&fields%5B%5D=ProjectTitle&fields%5B%5D=HeroImage&fields%5B%5D=MainDisciplineOfWork&fields%5B%5D=LinkedStudentRecordId'
+      /* ,
+          body:{
+            fields:["StudentFirstName", "StudentLastName", "ProjectTitle", "HeroImage", "MainDisciplineOfWork", "LinkedStudentRecordId"],
+          } */
+      // Fetch data from the API
+      let allRecords = [];
+      let response = {};
+      let dataOffset;
+      
+      do{
+        response = await fetch(`${apiUrl}${dataOffset ?`?offset=${dataOffset}`:""}`, requestOptions)
+          .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
         })
-        .then(data => {
-            // Display data in the list
-            let projectDetails = [];
-            data.records.forEach(item => {
-                projectDetails.push({
-                    id: item.id,
-                    StudentFirstName: item.fields.StudentFirstName && item.fields.StudentFirstName.length ? item.fields.StudentFirstName[0]: '',
-                    StudentLastName: item.fields.StudentLastName && item.fields.StudentLastName.length ? item.fields.StudentLastName[0]: '',
-                    ProjectTitle: item.fields.ProjectTitle,
-                    MainDisciplineOfWork: item.fields.MainDisciplineOfWork,
-                    author: `${item.fields.StudentFirstName && item.fields.StudentFirstName.length ? item.fields.StudentFirstName[0]: ''} 
-                    ${item.fields.StudentLastName && item.fields.StudentLastName.length ? item.fields.StudentLastName[0]: ''}`,
-                    HeroImage: item.fields.HeroImage && item.fields.HeroImage.length ? item.fields.HeroImage[0]: '',
-                    LinkedStudentRecordId: item.fields.LinkedStudentRecordId && item.fields.LinkedStudentRecordId.length ? item.fields.LinkedStudentRecordId[0]: '',
-                })
-            }); 
-            return projectDetails;
-        })
         .catch(error => {
             console.error('Error fetching data:', error);
+            throw error;
         });
+        dataOffset=null;
+        dataOffset = response.offset;
+        allRecords = response.records.concat(allRecords);  
+      }while(dataOffset)
+
+      return allRecords;
+      //            return response.json();
+    }catch(error) {
+      throw error;
+    }
+    
+
 }
 
 function getStudentInformationByRecordId(recordId, currentProjectId){
@@ -734,12 +755,12 @@ function setProjectDataInModal(projectData){
   authorName.appendChild(preferredName);
   // create graduate
   const graduate = document.createElement("span");
-  graduate.innerText = "Graduate: " + projectData.StudentInfo?.IsGraduated? "Yes": "No";
+  graduate.innerText = `Graduate: ${projectData.StudentInfo?.IsGraduated? "Yes": "No"}` ;
   // create student number
-  const studNo = document.createElement("span");
+  /* const studNo = document.createElement("span");
   studNo.setAttribute("id", "student-number");
   // match student number
-  studNo.innerText = projectData?.StudentNo;
+  studNo.innerText = projectData?.StudentNo; */
   // create a line break
   const lineBreak = document.createElement("p");
   // create personal site link
@@ -778,7 +799,7 @@ function setProjectDataInModal(projectData){
   const twitter = document.createElement("a");
   twitter.setAttribute("id", "social-media");
   twitter.setAttribute("target", "_blank");
-  twitter.setAttribute("href", projectData.StudentInfo?.TwitterLink);
+  twitter.setAttribute("href", projectData.StudentInfo?.TwiterLink);
   // twitter.innerText = "Twitter";
   // create twitter icon
   const twitterIcon = document.createElement("img");
@@ -870,7 +891,7 @@ function setProjectDataInModal(projectData){
     facebook.setAttribute("class", "hidden");
   } */
 
-  var twitterCheck = projectData.StudentInfo.hasOwnProperty('TwitterLink');
+  var twitterCheck = projectData.StudentInfo.hasOwnProperty('TwiterLink');
   if (twitterCheck) { } else {
     twitter.setAttribute("class", "hidden");
   }
@@ -908,7 +929,7 @@ function setProjectDataInModal(projectData){
   // include all elements to author bio
   authorBioHolder.appendChild(authorName);
   authorBioHolder.appendChild(graduate);
-  authorBioHolder.appendChild(studNo);
+  // authorBioHolder.appendChild(studNo);
   authorBioHolder.appendChild(lineBreak);
   authorBioHolder.appendChild(personalSite);
   authorBioHolder.appendChild(instagram);
